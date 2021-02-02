@@ -23,61 +23,54 @@ var maximalSquare = function (matrix) {
         }
     }
 
-    return max*max;
+    return max * max;
 };
 
+//    ___ ___ ___ ___
+//   |_1_|_2_|_3_|_4_|
+//   |_2_|_2_|_3_|_4_|
+//   |_3_|_3_|_3_|_4_|
+//   |_4_|_4_|_4_|_4_|
+//
 function getDeep(matrix, i, j, deepKeeper) {
     if (deepKeeper[i][j] >= 0) {
         return deepKeeper[i][j];
     }
 
+    //    ___ ___
+    //   |_1_|_X_|
+    //   |_X_|_X_|
+    let neighbors = [[i, j + 1], [i + 1, j + 1], [i + 1, j]];
+    let min = Infinity;
     deepKeeper[i][j] = 0;
-    let neighbors = hasNeighbors(matrix, i, j);
-    if (neighbors != null) {
-        let min = Infinity;
+    if (matrix.length > i + 1 && matrix[i].length > j + 1) {
         for (let i = 0; i < neighbors.length; i++) {
+            if (matrix[neighbors[i][0]][neighbors[i][1]] != "1") {
+                return 0;
+            }
             min = Math.min(min, getDeep(matrix, neighbors[i][0], neighbors[i][1], deepKeeper));
         }
         deepKeeper[i][j] = min + 1;
     }
-
     return deepKeeper[i][j];
 }
-
-//    ___ ___
-//   |_1_|_x_|
-//   |_X_|_X_|
-//
-function hasNeighbors(matrix, i, j) {
-    let neighbors = [[i, j + 1], [i + 1, j + 1], [i + 1, j]];
-
-    if (matrix.length > i + 1 && matrix[i].length > j + 1) {
-        for (let i = 0; i < neighbors.length; i++) {
-            if (matrix[neighbors[i][0]][neighbors[i][1]] != "1") {
-                return null;
-            }
-        }
-        return neighbors;
-    }
-    return null;
-}
-
-
 
 
 
 // -----------------------------  UNIT TESTs -----------------------------
-console.assert(maximalSquare([
-    ["1", "0", "1", "0", "0"],
-    ["1", "0", "1", "1", "1"],
-    ["1", "1", "1", "1", "1"],
-    ["1", "0", "0", "1", "0"]]) == 4, "1");
+// console.assert(maximalSquare([
+//     ["1", "0", "1", "0", "0"],
+//     ["1", "0", "1", "1", "1"],
+//     ["1", "1", "1", "1", "1"],
+//     ["1", "0", "0", "1", "0"]]) == 4, "1");
 
-console.assert(maximalSquare([
-    ["0", "1"],
-    ["1", "0"]]) == 1, "2");
+// console.assert(maximalSquare([
+//     ["0", "1"],
+//     ["1", "0"]]) == 1, "2");
 
-console.assert(maximalSquare([["0"]]) == 0, "3");
+// console.assert(maximalSquare([["0"]]) == 0, "3");
+
+console.assert(maximalSquare([["1", "1"]]) == 1, "4");
 // -----------------------------  /UNIT TESTs -----------------------------
 
 console.log("END");

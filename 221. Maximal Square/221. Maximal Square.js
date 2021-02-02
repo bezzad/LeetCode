@@ -10,19 +10,20 @@
 var maximalSquare = function (matrix) {
     let max = 0;
     let deepKeeper = new Array(matrix.length).fill().map(() => new Array(matrix[0].length).fill(-1));
-    // matrix.forEach((v) => v.push("0")); // right zero padding
-    // matrix.push(new Array(matrix[0].length).fill("0")); // bottom zero padding
 
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j] == "1") {
                 let currentLen = getDeep(matrix, i, j, deepKeeper) + 1;
-                max = Math.max(max, currentLen);                
+                max = Math.max(max, currentLen);
+            }
+            else {
+                deepKeeper[i][j] = 0;
             }
         }
     }
 
-    return max;
+    return max*max;
 };
 
 function getDeep(matrix, i, j, deepKeeper) {
@@ -37,7 +38,7 @@ function getDeep(matrix, i, j, deepKeeper) {
         for (let i = 0; i < neighbors.length; i++) {
             min = Math.min(min, getDeep(matrix, neighbors[i][0], neighbors[i][1], deepKeeper));
         }
-        deepKeeper[i, j] = min + 1;
+        deepKeeper[i][j] = min + 1;
     }
 
     return deepKeeper[i][j];
@@ -52,7 +53,7 @@ function hasNeighbors(matrix, i, j) {
 
     if (matrix.length > i + 1 && matrix[i].length > j + 1) {
         for (let i = 0; i < neighbors.length; i++) {
-            if (matrix[neighbors[i][0], neighbors[i][1]] != "1") {
+            if (matrix[neighbors[i][0]][neighbors[i][1]] != "1") {
                 return null;
             }
         }
